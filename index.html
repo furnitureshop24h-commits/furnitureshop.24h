@@ -32,7 +32,7 @@
     .banner .overlay{position:absolute;left:24px;top:24px;color:#fff;text-shadow:0 6px 18px rgba(0,0,0,0.55); /* Stronger shadow */ transform:translateZ(1px);} /* Elevate text */
     .banner h1{margin:0;font-family:'Comfortaa',cursive;font-weight:700;font-size:38px;letter-spacing:0.8px; /* Slightly larger */ line-height:1.2;}
     .banner p{margin:8px 0 0;font-size:16px; /* Slightly larger */ font-weight:300;}
-    .banner .cta{margin-top:16px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));padding:12px 20px; /* Larger padding */ border-radius:12px; /* Softer corners */ display:inline-block;cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(0,0,0,0.25);transition:all .2s ease;}
+    .banner .cta{margin-top:16px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));padding:12px 20px; /* Larger padding */ border-radius:12px; /* Softer corners */ display:inline-block;cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(0,0,0,0.25);transition:all .2s ease; text-decoration: none; color: #fff;}
     .banner .cta:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(0,0,0,0.35);}
 
     /* Layout */
@@ -81,10 +81,44 @@
 
 
     /* Responsive smaller banner height */
-    @media (max-width:600px){.banner img{height:220px}.banner h1{font-size:28px}.banner p{font-size:14px}} /* Adjusted font size for mobile */
+    @media (max-width:600px){
+      header{margin:16px auto;}
+      .banner img{height:220px}
+      .banner .overlay{left:16px; top: 16px;}
+      .banner h1{font-size:28px}
+      .banner p{font-size:14px}
+      .banner .cta{padding:10px 16px; font-size: 14px; width: 100%; text-align: center;} /* Make CTA full width on mobile */
+      .toolbar{flex-direction: column; align-items: stretch;}
+      .search{margin-right:0; margin-bottom: 15px;}
+      .small{text-align: center;}
+      .grid{grid-template-columns:1fr; gap:16px;} /* Single column on small screens */
+      .card{padding:12px; border-radius:12px;}
+      .card img{height:150px; border-radius:10px;}
+      .meta{margin-top:10px;}
+      .order-btn{margin-top:12px;padding:10px;font-size:15px;}
+      .modal{padding:20px; border-radius:16px;}
+      .modal h3{font-size:22px;}
+      .field label{font-size:13px;margin-bottom:6px;}
+      .field input, .field select{padding:10px;font-size:14px;}
+      .modal .actions{flex-direction: column-reverse; gap:10px;}
+      .btn{width:100%;padding:10px 16px;}
+      .success-box h4{font-size:20px;}
+      .success-box p.small{font-size:14px;}
+      .badge{right:16px;top:16px;padding:7px 12px;font-size:12px;}
+    }
 
     /* subtle animated badge */
     .badge{position:absolute;right:24px;top:24px;background:var(--glass);padding:9px 14px;border-radius:999px;font-weight:700;backdrop-filter:blur(8px);box-shadow:0 8px 20px rgba(2,6,23,0.1);z-index:10; /* Ensure badge is above */ border:1px solid rgba(255,255,255,0.3); /* Subtle border */}
+
+    .footer-link{
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 5px;
+      transition: color 0.2s ease;
+    }
+    .footer-link:hover{
+      color: var(--accent);
+    }
 
   </style>
 </head>
@@ -96,7 +130,7 @@
       <div class="overlay">
         <h1>Furniture Shop</h1>
         <p>সুন্দর, মজবুত আর অ্যাফোর্ডেবল — তোমার বাড়ির জন্য</p>
-        <div class="cta" id="scrollProducts">Shop Now</div>
+        <a href="#products" class="cta">Shop Now</a>
       </div>
       <div class="badge">Best Prices • Trusted</div>
     </div>
@@ -154,6 +188,8 @@
   <!-- Footer -->
   <footer style="max-width:1200px;margin:40px auto 20px;padding:16px;text-align:center;color:var(--muted);font-size:14px">
     © Furniture Shop — Designed with ❤
+    <br>
+    <a href="https://www.facebook.com/profile.php?id=61583611250357" target="_blank" rel="noopener noreferrer" class="footer-link">Facebook Page</a>
   </footer>
 
   <!-- Ad scripts (as provided) -->
@@ -233,7 +269,7 @@
       {img:'https://i.imgur.com/x6heNAT.jpg', price:'200 tk', title:'Bathroom Organizer'},
       {img:'https://i.imgur.com/NicyipB.jpg', price:'400 tk', title:'Magazine Rack'},
       {img:'https://i.imgur.com/6bPneXJ.jpg', price:'150 tk', title:'Jewelry Box'},
-      {img:'https://i.imgur.com/Nk9ocZ5.jpg', price:'250 tk', title:'Makeup Organizer'},
+      {img:'https://i.imgur.com/Nk9ocZ3.jpg', price:'250 tk', title:'Makeup Organizer'},
       {img:'https://i.imgur.com/aBjGi4W.jpg', price:'100 tk', title:'Soap Dispenser'},
       {img:'https://i.imgur.com/FfN7wz2.jpg', price:'99 tk', title:'Toothbrush Holder'},
       {img:'https://i.imgur.com/Yb3ykBq.jpg', price:'999 tk', title:'Comfy Ottoman'},
@@ -338,9 +374,10 @@
     });
 
     // scroll to products on CTA
-    document.getElementById('scrollProducts').addEventListener('click', ()=>{
-      document.getElementById('products').scrollIntoView({behavior:'smooth'});
-    });
+    // Changed this to use the `<a>` tag with href, which also works for accessibility and SEO.
+    // document.getElementById('scrollProducts').addEventListener('click', ()=>{
+    //   document.getElementById('products').scrollIntoView({behavior:'smooth'});
+    // });
 
     // Accessibility: close on ESC
     document.addEventListener('keydown',(e)=>{ if(e.key==='Escape' && overlayModal.style.display==='flex'){ closeOrder(); } });
@@ -348,4 +385,5 @@
   </script>
 
 </body>
+
 </html>
