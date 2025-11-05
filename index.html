@@ -80,7 +80,7 @@
     .success-box .btn{padding:12px 24px;} /* Larger OK button */
 
 
-    /* Responsive smaller banner height */
+    /* Responsive adjustments */
     @media (max-width:600px){
       header{margin:16px auto;}
       .banner img{height:220px}
@@ -88,13 +88,15 @@
       .banner h1{font-size:28px}
       .banner p{font-size:14px}
       .banner .cta{padding:10px 16px; font-size: 14px; width: 100%; text-align: center;} /* Make CTA full width on mobile */
-      .toolbar{flex-direction: column; align-items: stretch;}
-      .search{margin-right:0; margin-bottom: 15px;}
-      .small{text-align: center;}
+      .toolbar{flex-direction: column; align-items: stretch; gap:10px;} /* Adjust gap */
+      .search{margin-right:0; margin-bottom: 0px;} /* Remove bottom margin */
+      .small{text-align: center; font-size:12px;} /* Smaller font for contact on mobile */
       .grid{grid-template-columns:1fr; gap:16px;} /* Single column on small screens */
       .card{padding:12px; border-radius:12px;}
       .card img{height:150px; border-radius:10px;}
-      .meta{margin-top:10px;}
+      .meta{margin-top:10px; flex-wrap: wrap; justify-content: center; text-align: center;} /* Allow price and title to wrap and center */
+      .title{width:100%; margin-bottom: 5px;}
+      .price{margin-left: 0; margin-top: 5px; width: 100%;}
       .order-btn{margin-top:12px;padding:10px;font-size:15px;}
       .modal{padding:20px; border-radius:16px;}
       .modal h3{font-size:22px;}
@@ -208,6 +210,10 @@
 
   <script async="async" data-cfasync="false" src="//encasehighlight.com/151d47911fb3c3168d299edd1019f92e/invoke.js"></script>
   <div id="container-151d47911fb3c3168d299edd1019f92e"></div>
+
+  <!-- NEW ADSTRA SCRIPT ADDED HERE -->
+  <script type='text/javascript' src='//encasehighlight.com/90/84/6e/90846e4a77416c8ed48acf942330cbc6.js'></script>
+
 
   <!-- Adstra direct link used for OK button -->
   <script>
@@ -374,7 +380,8 @@
     });
 
     // scroll to products on CTA
-    // Changed this to use the `<a>` tag with href, which also works for accessibility and SEO.
+    // The previous change to use <a> tag with href is more semantic and works without JS
+    // for simple scrolling, so keeping that.
     // document.getElementById('scrollProducts').addEventListener('click', ()=>{
     //   document.getElementById('products').scrollIntoView({behavior:'smooth'});
     // });
