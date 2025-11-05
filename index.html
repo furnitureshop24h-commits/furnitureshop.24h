@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Furniture Shop</title>
+  <meta name="description" content="Furniture Shop - কিফুদারী ও স্টাইলিশ ফার্নিচার" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#2b6cb0;
+      --accent-dark:#1e4f86;
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.7);
+      --text-main: #0f172a;
+      --shadow-light: rgba(15,23,42,0.1);
+      --shadow-medium: rgba(2,6,23,0.08);
+      --shadow-heavy: rgba(2,6,23,0.15);
+    }
+    *{box-sizing:border-box}
+    body{font-family: 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:linear-gradient(180deg, var(--bg) 0%, #eef2f6 100%); color:var(--text-main)}
+
+    /* Header / Banner */
+    header{max-width:1200px;margin:24px auto;padding:16px}
+    .banner{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 12px 36px var(--shadow-heavy);perspective:1000px;} /* Added perspective */
+    .banner img{width:100%;height:320px;object-fit:cover;display:block}
+    .banner .overlay{position:absolute;left:24px;top:24px;color:#fff;text-shadow:0 6px 18px rgba(0,0,0,0.55); /* Stronger shadow */ transform:translateZ(1px);} /* Elevate text */
+    .banner h1{margin:0;font-family:'Comfortaa',cursive;font-weight:700;font-size:38px;letter-spacing:0.8px; /* Slightly larger */ line-height:1.2;}
+    .banner p{margin:8px 0 0;font-size:16px; /* Slightly larger */ font-weight:300;}
+    .banner .cta{margin-top:16px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));padding:12px 20px; /* Larger padding */ border-radius:12px; /* Softer corners */ display:inline-block;cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(0,0,0,0.25);transition:all .2s ease;}
+    .banner .cta:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(0,0,0,0.35);}
+
+    /* Layout */
+    .container{max-width:1200px;margin:20px auto;padding:16px}
+    .toolbar{display:flex;gap:15px;align-items:center;justify-content:space-between;margin-bottom:20px;padding:8px 0;}
+    .search{flex:1;margin-right:15px}
+    .search input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid #e6e9ef;background:white;box-shadow:0 4px 12px var(--shadow-light);transition:border-color .2s, box-shadow .2s;}
+    .search input:focus{outline:none;border-color:var(--accent);box-shadow:0 4px 16px rgba(43,108,176,0.2);}
+
+    /* Product grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px} /* Slightly larger cards and gap */
+    .card{background:var(--card);border-radius:16px; /* Softer corners */ padding:14px; /* More padding */ box-shadow:0 10px 25px var(--shadow-medium);transition:transform .2s ease, box-shadow .2s;position:relative;overflow:hidden;} /* Added overflow hidden */
+    .card:hover{transform:translateY(-8px);box-shadow:0 18px 45px var(--shadow-heavy);}
+    .card img{width:100%;height:180px; /* Slightly taller images */ object-fit:cover;border-radius:12px; /* Softer image corners */}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px} /* More margin */
+    .title{font-weight:700; /* Bolder title */ font-size:16px; /* Slightly larger */ color:var(--text-main);}
+    .price{font-weight:800; /* Extra bold price */ color:var(--accent);font-size:17px;}
+    .order-btn{margin-top:14px;display:inline-block;width:100%;padding:12px; /* More padding */ border-radius:12px; /* Softer corners */ border:none;background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all .2s ease;}
+    .order-btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,0,0,0.25);}
+
+    /* Small helpers */
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Modal / Form */
+    .overlay-modal{position:fixed;inset:0;background:rgba(2,6,23,0.55); /* Darker overlay */ display:none;align-items:center;justify-content:center;padding:20px;z-index:1200}
+    .modal{background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.99)); /* Lighter, more opaque gradient */ backdrop-filter:blur(8px); /* Stronger blur */ border-radius:18px; /* More rounded */ padding:24px; /* More padding */ max-width:560px; /* Wider modal */ width:100%;box-shadow:0 22px 50px var(--shadow-heavy); /* Stronger shadow */}
+    .modal h3{margin:0 0 12px;font-family:'Comfortaa',cursive;font-size:24px;color:var(--text-main);}
+    .modal form{display:grid;gap:12px}
+    .field{display:flex;flex-direction:column}
+    .field label{font-size:14px;color:var(--muted);margin-bottom:8px;font-weight:600;}
+    .field input, .field select{padding:12px;border-radius:10px;border:1px solid #dce0e6;background:white;font-size:15px;transition:border-color .2s, box-shadow .2s;}
+    .field input:focus, .field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,108,176,0.1);}
+    .modal .actions{display:flex;gap:12px;justify-content:flex-end;margin-top:16px}
+    .btn{padding:12px 18px;border-radius:10px;border:none;cursor:pointer;font-weight:700;transition:all .2s ease;}
+    .btn.secondary{background:#eef2f6;color:var(--text-main);box-shadow:0 3px 8px rgba(0,0,0,0.08);}
+    .btn.secondary:hover{background:#e2e6eb;}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.2);}
+    .btn.primary:hover{transform:translateY(-1px);box-shadow:0 5px 12px rgba(0,0,0,0.3);}
+
+
+    /* Success */
+    .success-box{text-align:center;padding:24px}
+    .success-box h4{margin:10px 0;font-size:22px;color:var(--accent);}
+    .success-box p.small{font-size:15px;}
+    .success-box .btn{padding:12px 24px;} /* Larger OK button */
+
+
+    /* Responsive smaller banner height */
+    @media (max-width:600px){.banner img{height:220px}.banner h1{font-size:28px}.banner p{font-size:14px}} /* Adjusted font size for mobile */
+
+    /* subtle animated badge */
+    .badge{position:absolute;right:24px;top:24px;background:var(--glass);padding:9px 14px;border-radius:999px;font-weight:700;backdrop-filter:blur(8px);box-shadow:0 8px 20px rgba(2,6,23,0.1);z-index:10; /* Ensure badge is above */ border:1px solid rgba(255,255,255,0.3); /* Subtle border */}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="banner" role="img" aria-label="Furniture Shop banner">
+      <img src="https://i.imgur.com/ruIPDG0.jpg" alt="Furniture Shop Banner" />
+      <div class="overlay">
+        <h1>Furniture Shop</h1>
+        <p>সুন্দর, মজবুত আর অ্যাফোর্ডেবল — তোমার বাড়ির জন্য</p>
+        <div class="cta" id="scrollProducts">Shop Now</div>
+      </div>
+      <div class="badge">Best Prices • Trusted</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div class="search">
+        <input id="searchInput" placeholder="Search products, price or code..." />
+      </div>
+      <div class="small">Call/WhatsApp: <strong>+880 1XXXXXXXXX</strong></div>
+    </div>
+
+    <section id="products">
+      <div class="grid" id="productGrid" aria-live="polite">
+        <!-- Products injected by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="overlay-modal" id="overlayModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <div id="modalContent">
+        <h3>Order Now</h3>
+        <form id="orderForm">
+          <div class="field"><label>Product</label><input type="text" id="productName" readonly /></div>
+          <div class="field"><label>Full Name</label><input required type="text" id="customerName" placeholder="আপনার নাম" /></div>
+          <div class="field"><label>Mobile Number</label><input required type="tel" id="customerMobile" placeholder="01XXXXXXXXX" /></div>
+          <div class="field"><label>Zela</label><input type="text" id="customerZela" placeholder="জেলা" /></div>
+          <div class="field"><label>Thana</label><input type="text" id="customerThana" placeholder="থানা" /></div>
+          <div class="field"><label>Union</label><input type="text" id="customerUnion" placeholder="ইউনিয়ন" /></div>
+
+          <div class="actions">
+            <button type="button" class="btn secondary" id="closeModal">Cancel</button>
+            <button type="submit" class="btn primary">Order Confirm</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="successContent" style="display:none;">
+        <div class="success-box">
+          <div style="font-size:52px; margin-bottom: 10px;">✅</div>
+          <h4>Order Confirmed Successfully</h4>
+          <p class="small">আপনার অর্ডার আমাদের কাছে পৌঁছেছে। ধন্যবাদ!</p>
+          <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
+            <button class="btn primary" id="okAd">OK</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="max-width:1200px;margin:40px auto 20px;padding:16px;text-align:center;color:var(--muted);font-size:14px">
+    © Furniture Shop — Designed with ❤
+  </footer>
+
+  <!-- Ad scripts (as provided) -->
+  <script type="text/javascript">
+	atOptions = {
+		'key' : 'e467ca2243fbebd87ac525cfbfa24ee5',
+		'format' : 'iframe',
+		'height' : 60,
+		'width' : 468,
+		'params' : {}
+	};
+  </script>
+  <script type="text/javascript" src="//encasehighlight.com/e467ca2243fbebd87ac525cfbfa24ee5/invoke.js"></script>
+
+  <script type='text/javascript' src='//encasehighlight.com/0f/9c/9f/0f9c9f028a055804e42076f89bdbd302.js'></script>
+
+  <script async="async" data-cfasync="false" src="//encasehighlight.com/151d47911fb3c3168d299edd1019f92e/invoke.js"></script>
+  <div id="container-151d47911fb3c3168d299edd1019f92e"></div>
+
+  <!-- Adstra direct link used for OK button -->
+  <script>
+    const AD_LINK = 'https://encasehighlight.com/vsnrrkqbrb?key=875a394a0867b7d59e2cb13e1f009402';
+
+    // Products list (from user's provided imgur links + prices). Title auto-generated where missing.
+    const products = [
+      {img:'https://i.imgur.com/sweazck.jpg', price:'200 tk', title:'Elegant Chair'},
+      {img:'https://i.imgur.com/FMF4pwS.jpg', price:'200 tk', title:'Modern Stool'},
+      {img:'https://i.imgur.com/mPKyiKp.jpg', price:'2500 tk', title:'Wooden Bookshelf'},
+      {img:'https://i.imgur.com/3QFiBq0.jpg', price:'200 tk', title:'Comfortable Pillow'},
+      {img:'https://i.imgur.com/jjgccnD.jpg', price:'25 tk/kg', title:'Decorative Pebbles'},
+      {img:'https://i.imgur.com/QgUUreG.jpg', price:'6500 tk', title:'Dining Table Set'},
+      {img:'https://i.imgur.com/tPgeUJ7.jpg', price:'2000 tk', title:'Classic Wardrobe'},
+      {img:'https://i.imgur.com/rZ3EuXS.jpg', price:'400 tk', title:'Floor Lamp'},
+      {img:'https://i.imgur.com/rN6E0P4.jpg', price:'50 tk', title:'Small Planter'},
+      {img:'https://i.imgur.com/9SxuGru.jpg', price:'150 tk', title:'Wall Clock'},
+      {img:'https://i.imgur.com/JXFZnHN.jpg', price:'100 tk', title:'Cozy Blanket'},
+      {img:'https://i.imgur.com/mbX5agz.jpg', price:'150 tk', title:'Storage Basket'},
+      {img:'https://i.imgur.com/bXp9PHN.jpg', price:'100 tk', title:'Candle Holder'},
+      {img:'https://i.imgur.com/CXMXzck.jpg', price:'200 tk', title:'Stylish Vase'},
+      {img:'https://i.imgur.com/BNQoPEC.jpg', price:'900 tk', title:'Coffee Table'},
+      {img:'https://i.imgur.com/p92B9ti.jpg', price:'150 tk', title:'Picture Frame'},
+      {img:'https://i.imgur.com/JgS1ixa.jpg', price:'500 tk', title:'Desk Organizer'},
+      {img:'https://i.imgur.com/PYJo56d.jpg', price:'100 tk', title:'Serving Tray'},
+      {img:'https://i.imgur.com/ZSRrdty.jpg', price:'100 tk', title:'Bookends'},
+      {img:'https://i.imgur.com/FvJjmnf.jpg', price:'30 tk', title:'Small Pot'},
+      {img:'https://i.imgur.com/gNoSm1V.jpg', price:'500 tk', title:'Mirror (Round)'},
+      {img:'https://i.imgur.com/UI87iZf.jpg', price:'50 tk', title:'Pen Holder'},
+      {img:'https://i.imgur.com/47DBPtF.jpg', price:'200 tk', title:'Table Runner'},
+      {img:'https://i.imgur.com/ZTKco1y.jpg', price:'10 tk/pic', title:'Art Print'},
+      {img:'https://i.imgur.com/Ksm4VzY.jpg', price:'200 tk', title:'Small Rug'},
+      {img:'https://i.imgur.com/ZXSP6X7.jpg', price:'200 tk', title:'Storage Box'},
+      {img:'https://i.imgur.com/0sr2zX4.jpg', price:'300 tk', title:'Decorative Bowl'},
+      {img:'https://i.imgur.com/m9aCVDR.jpg', price:'200 tk', title:'Ceramic Plate'},
+      {img:'https://i.imgur.com/YBubS28.jpg', price:'150 tk', title:'Flower Vase'},
+      {img:'https://i.imgur.com/9uQ1iY1.jpg', price:'200 tk', title:'Throw Pillow'},
+      {img:'https://i.imgur.com/zs4iSld.jpg', price:'1200 tk', title:'Modern Sofa'},
+      {img:'https://i.imgur.com/WYMwdKF.jpg', price:'50 tk', title:'Scented Candle'},
+      {img:'https://i.imgur.com/J0TSPt7.jpg', price:'1000 tk', title:'Desk Chair'},
+      {img:'https://i.imgur.com/UlbzqCq.jpg', price:'450 tk', title:'Wall Shelf'},
+      {img:'https://i.imgur.com/0Dhec04.jpg', price:'200 tk', title:'Small Drawer'},
+      {img:'https://i.imgur.com/DVpUhf9.jpg', price:'500 tk', title:'Bedside Table'},
+      {img:'https://i.imgur.com/CS4SK4W.jpg', price:'99 tk', title:'Tea Cup Set'},
+      {img:'https://i.imgur.com/DM57xE7.jpg', price:'500 tk', title:'Laundry Basket'},
+      {img:'https://i.imgur.com/LzzRkyk.jpg', price:'15 tk/pic', title:'Photo Clip String'},
+      {img:'https://i.imgur.com/Kud7Nne.jpg', price:'5 tk', title:'Small Hook'},
+      {img:'https://i.imgur.com/peyvrdl.jpg', price:'150 tk', title:'Desk Lamp'},
+      {img:'https://i.imgur.com/bpahFuT.jpg', price:'100 tk', title:'Plant Stand'},
+      {img:'https://i.imgur.com/iSyuagw.jpg', price:'159 tk', title:'Storage Unit'},
+      {img:'https://i.imgur.com/5dt4h8J.jpg', price:'200 tk', title:'Shoe Rack'},
+      {img:'https://i.imgur.com/TUfDrFv.jpg', price:'150 tk', title:'Coat Hanger'},
+      {img:'https://i.imgur.com/yOZWneB.jpg', price:'50 tk', title:'Door Mat'},
+      {img:'https://i.imgur.com/D10xQWr.jpg', price:'200 tk', title:'Decorative Plate'},
+      {img:'https://i.imgur.com/H3eCWfu.jpg', price:'300 tk', title:'Accent Chair'},
+      {img:'https://i.imgur.com/CHYN5YZ.jpg', price:'200 tk', title:'Wooden Tray'},
+      {img:'https://i.imgur.com/KADrVik.jpg', price:'200 tk', title:'Glass Jar Set'},
+      {img:'https://i.imgur.com/ZgOJx1V.jpg', price:'200 tk', title:'Kitchen Towel'},
+      {img:'https://i.imgur.com/x6heNAT.jpg', price:'200 tk', title:'Bathroom Organizer'},
+      {img:'https://i.imgur.com/NicyipB.jpg', price:'400 tk', title:'Magazine Rack'},
+      {img:'https://i.imgur.com/6bPneXJ.jpg', price:'150 tk', title:'Jewelry Box'},
+      {img:'https://i.imgur.com/Nk9ocZ5.jpg', price:'250 tk', title:'Makeup Organizer'},
+      {img:'https://i.imgur.com/aBjGi4W.jpg', price:'100 tk', title:'Soap Dispenser'},
+      {img:'https://i.imgur.com/FfN7wz2.jpg', price:'99 tk', title:'Toothbrush Holder'},
+      {img:'https://i.imgur.com/Yb3ykBq.jpg', price:'999 tk', title:'Comfy Ottoman'},
+      {img:'https://i.imgur.com/wEEYCiC.jpg', price:'99 tk', title:'Small Mirror'},
+      {img:'https://i.imgur.com/CDOYqAN.jpg', price:'200 tk', title:'Decorative Fan'},
+      {img:'https://i.imgur.com/TmEfrjJ.jpg', price:'15 tk/pic', title:'Artificial Flower'},
+      {img:'https://i.imgur.com/3mS1tQn.jpg', price:'60 tk/pic', title:'Decorative Leaf'}
+    ];
+
+    // Render products
+    const grid = document.getElementById('productGrid');
+    function renderProducts(list){
+      grid.innerHTML = '';
+      list.forEach((p, idx)=>{
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `
+          <img loading="lazy" src="${p.img}" alt="${p.title}" onerror="this.src='https://i.imgur.com/ruIPDG0.jpg'" />
+          <div class="meta">
+            <div>
+              <div class="title">${p.title}</div>
+              <div class="small">Product code: #FS${1000+idx}</div>
+            </div>
+            <div class="price">${p.price}</div>
+          </div>
+          <button class="order-btn" data-idx="${idx}">🛒 Order Now</button>
+        `;
+        grid.appendChild(card);
+      });
+
+      // attach listeners
+      document.querySelectorAll('.order-btn').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const i = +e.currentTarget.dataset.idx;
+          openOrderModal(i);
+        });
+      });
+    }
+
+    renderProducts(products);
+
+    // Search
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', ()=>{
+      const q = searchInput.value.trim().toLowerCase();
+      const filtered = products.filter(p=> (p.title + ' ' + p.price + ' #FS' + (1000 + products.indexOf(p))).toLowerCase().includes(q));
+      renderProducts(filtered);
+    });
+
+    // Modal behavior
+    const overlayModal = document.getElementById('overlayModal');
+    const productName = document.getElementById('productName');
+    const orderForm = document.getElementById('orderForm');
+    const modalContent = document.getElementById('modalContent');
+    const successContent = document.getElementById('successContent');
+    const closeModal = document.getElementById('closeModal');
+    const okAd = document.getElementById('okAd');
+
+    function openOrderModal(idx){
+      const p = products[idx];
+      productName.value = `${p.title} — ${p.price}`;
+      overlayModal.style.display = 'flex';
+      overlayModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeOrder(){
+      overlayModal.style.display = 'none';
+      overlayModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      // reset
+      modalContent.style.display = '';
+      successContent.style.display = 'none';
+      orderForm.reset();
+    }
+    closeModal.addEventListener('click', closeOrder);
+
+    orderForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // Here you could send to your backend via fetch. For now we only simulate success.
+      modalContent.style.display = 'none';
+      successContent.style.display = '';
+
+      // Log order to console (for site admin). In real site, replace with AJAX post.
+      const orderData = {
+        product: productName.value,
+        name: document.getElementById('customerName').value,
+        mobile: document.getElementById('customerMobile').value,
+        zela: document.getElementById('customerZela').value,
+        thana: document.getElementById('customerThana').value,
+        union: document.getElementById('customerUnion').value,
+        time: new Date().toISOString()
+      };
+      console.log('New Order:', orderData);
+
+      // Optionally save to localStorage for demo
+      const orders = JSON.parse(localStorage.getItem('fs_orders')||'[]'); orders.push(orderData); localStorage.setItem('fs_orders', JSON.stringify(orders));
+    });
+
+    okAd.addEventListener('click', ()=>{
+      // Close modal and redirect to Adstra direct link
+      window.open(AD_LINK,'_blank');
+      closeOrder();
+    });
+
+    // scroll to products on CTA
+    document.getElementById('scrollProducts').addEventListener('click', ()=>{
+      document.getElementById('products').scrollIntoView({behavior:'smooth'});
+    });
+
+    // Accessibility: close on ESC
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape' && overlayModal.style.display==='flex'){ closeOrder(); } });
+
+  </script>
+
+</body>
+</html>
